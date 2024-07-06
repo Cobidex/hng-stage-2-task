@@ -5,7 +5,7 @@ const getOrganisation = async (req, res) => {
   try {
     const { orgId } = req.params;
     const me = req.user;
-    let org = await Organisation.findOne({
+    let  = await Organisation.findOne({
       where: { orgId },
       include: User,
     });
@@ -28,7 +28,7 @@ const getOrganisation = async (req, res) => {
         });
         org = org.toJSON();
         org.Users = filtered;
-        return res.status(400).json({
+        return res.status(200).json({
           status: "success",
           message: "Organisation retrieved",
           data: org,
@@ -43,6 +43,7 @@ const getOrganisation = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
+    return res.status(500).json({ error: "internal server error" })
   }
 };
 
@@ -87,6 +88,7 @@ const getUserOrganisations = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
+    return res.status(500).json({ error: "Internal server error" })
   }
 };
 
