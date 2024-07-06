@@ -1,14 +1,16 @@
 const express = require("express");
-const sequelize = require("./config");
+const sequelize = require("./sync.js");
 const morgan = require("morgan");
-const authRouter = require("./routes/authRouter.js");
-const userRouter = require("/routes/userRouter.js");
-const organisationRouter = require("/routes/organisationRoutes.js");
+const { config } = require('dotenv');
+const authRouter = require("./routes/authRoutes.js");
+//const userRouter = require("/routes/userRouter.js");
+const organisationRouter = require("./routes/organisationRoutes.js");
+
+config({ path: './.env'});
 
 const app = express();
 
-sequelize
-  .authenticate()
+sequelize.authenticate()
   .then(() => {
     console.log("Database connected!");
   })
@@ -21,9 +23,9 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 
-app.use("/api/users", userRouter);
+//app.use("/api/users", userRouter);
 
-app.use("api/organisations", organisationRouter);
+app.use("/api/organisations", organisationRouter);
 
 const port = process.env.PORT;
 app.listen(port, () => {
