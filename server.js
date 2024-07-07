@@ -1,8 +1,8 @@
-const { config } = require('dotenv');
-const sequelize = require("./sync.js");
-const app = require('./app.js');
+import { config } from "dotenv";
+import sequelize from "./sync.js";
+import app from "./app.js";
 
-config({ path: './.env'});
+config({ path: "./.env" });
 
 sequelize.authenticate()
   .then(() => {

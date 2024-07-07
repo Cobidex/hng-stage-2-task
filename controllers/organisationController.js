@@ -1,8 +1,8 @@
-const { Op } = require("sequelize");
-const Organisation = require("../models/organisationModel");
-const User = require("../models/userModel.js");
+import { Op } from "sequelize";
+import Organisation from "../models/organisationModel.js";
+import User from "../models/userModel.js";
 
-const getOrganisation = async (req, res) => {
+export const getOrganisation = async (req, res) => {
   try {
     const { orgId } = req.params;
     const { userId } = req.user.toJSON();
@@ -35,7 +35,7 @@ const getOrganisation = async (req, res) => {
   }
 };
 
-const createOrganisation = async (req, res) => {
+export const createOrganisation = async (req, res) => {
   try {
     const org = await Organisation.create({ ...req.body });
     await org.addUser(req.user);
@@ -54,7 +54,7 @@ const createOrganisation = async (req, res) => {
   }
 };
 
-const getUserOrganisations = async (req, res) => {
+export const getUserOrganisations = async (req, res) => {
   try {
     const { userId } = req.user.toJSON();
     const organisations = await Organisation.findAll({
@@ -79,7 +79,7 @@ const getUserOrganisations = async (req, res) => {
   }
 };
 
-const addUserToOrganisation = async (req, res) => {
+export const addUserToOrganisation = async (req, res) => {
   try {
     const { orgId } = req.params;
     const { userId } = req.body;
@@ -122,11 +122,4 @@ const addUserToOrganisation = async (req, res) => {
     console.log(e);
     return res.status(500).json({ error: "internal server error" });
   }
-};
-
-module.exports = {
-  createOrganisation,
-  getUserOrganisations,
-  getOrganisation,
-  addUserToOrganisation,
 };

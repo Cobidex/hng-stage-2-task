@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config");
-const User = require("./userModel");
-const Organisation = require("./organisationModel");
+import { DataTypes } from "sequelize";
+import sequelize from "../config.js";
+import User from "./userModel.js";
+import Organisation from "./organisationModel.js";
 
 const UserOrganisation = sequelize.define(
   "UserOrganisation",
@@ -32,4 +32,4 @@ const UserOrganisation = sequelize.define(
 User.belongsToMany(Organisation, { through: UserOrganisation });
 Organisation.belongsToMany(User, { through: UserOrganisation });
 
-module.exports = UserOrganisation;
+export default UserOrganisation;

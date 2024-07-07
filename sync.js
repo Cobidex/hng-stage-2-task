@@ -1,10 +1,9 @@
-const sequelize = require('./config.js');
-const User = require("./models/userModel.js");
-const Organisation = require("./models/organisationModel.js");
-const UserOrganisation = require("./models/userOrganisationModel.js");
+import sequelize from "./config.js";
+import User from "./models/userModel.js";
+import Organisation from "./models/organisationModel.js";
+import UserOrganisation from "./models/userOrganisationModel.js";
 
-sequelize
-  .sync()
+sequelize.sync()
   .then(() => {
     console.log("tables created!");
   })
@@ -12,4 +11,4 @@ sequelize
     console.error("Unable to create tables:", err);
   });
 
-module.exports = sequelize;
+export default sequelize;

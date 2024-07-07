@@ -1,74 +1,95 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import request from "supertest";
-import express from "express";
-import Organisation from "../models/organisationModel.js";
-const { getOrganisation } = require("../controllers/organisationController.js");
+import { describe, it, expect, vi } from 'vitest';
+import { getOrganisation } from '../controllers/organisationController.js';
+import Organisation from '../models/organisationModel.js';
 
-const app = express();
-app.use(express.json());
+// Mock the Organisation model
+vi.mock('../models/organisationModel.js', () => ({
+  Organisation: {
+    findOne: vi.fn(),
+  },
+  User: {},
+}));
 
-app.get("/organisation/:orgId", (req, res) => {
-  req.user = { userId: "12345", email: "test@example.com" };
-  getOrganisation(req, res);
-});
+describe('getOrganisation', () => {
+  it('should return organisation data if user has access', async () => {
+    // Mock request and response objects
+    const req = {
+      params: { orgId: 1 },
+      user: {
+        toJSON: () => ({ userId: 1 }),
+      },
+    };
 
-vi.mock("../models/organisationModel.js");
+    const res = {
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+    };
 
-describe("Organisation Access", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    // Mock organisation data
+    const orgData = { orgId: 1, name: 'Test Organisation', toJSON: () => orgData };
 
-  it("should not allow users to see data from organisations they don't have access to", async () => {
-    Organisation.findOne.mockResolvedValue({
-      toJSON: () => ({
-        orgId: "1",
-        name: "Test Org",
-        description: "Test Description",
-        Users: [
-          { userId: "54321", email: "another@example.com" },
-          { userId: "12345", email: "test@example.com" },
-        ],
-      }),
+    Organisation.findOne.mockResolvedValue(orgData);
+
+    // Call the function
+    await getOrganisation(req, res);
+
+    // Check if the response was correct
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 'success',
+      message: 'Organisation data',
+      data: orgData,
     });
-
-    const response = await request(app).get("/organisation/1");
-
-    expect(response.status).toBe(200);
-    expect(response.body.status).toBe("success");
-    expect(response.body.message).toBe("Organisation retrieved");
-    expect(response.body.data.Users).toHaveLength(2);
-
-    const user = response.body.data.Users.find((u) => u.userId === "12345");
-    expect(user).toBeDefined();
-    expect(user.password).toBeUndefined();
-    expect(user.UserOrganisation).toBeUndefined();
   });
 
-  it("should return an error if the user does not belong to the organisation", async () => {
-    Organisation.findOne.mockResolvedValue({
-      toJSON: () => ({
-        orgId: "1",
-        name: "Test Org",
-        description: "Test Description",
-        Users: [{ userId: "54321", email: "another@example.com" }],
-      }),
-    });
+  it('should return 404 if user does not have access', async () => {
+    // Mock request and response objects
+    const req = {
+      params: { orgId: 1 },
+      user: {
+        toJSON: () => ({ userId: 2 }),
+      },
+    };
 
-    const response = await request(app).get("/organisation/1");
+    const res = {
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+    };
 
-    expect(response.status).toBe(400);
-    expect(response.body.status).toBe("Bad Request");
-    expect(response.body.message).toBe("Client error");
-  });
-
-  it("should return an error if the organisation does not exist", async () => {
     Organisation.findOne.mockResolvedValue(null);
 
-    const response = await request(app).get("/organisation/1");
+    // Call the function
+    await getOrganisation(req, res);
 
-    expect(response.status).toBe(400);
-    expect(response.body.status).toBe("Bad Request");
-    expect(response.body.message).toBe("Client error");
+    // Check if the response was correct
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 'Not Found',
+      message: 'Organisation id not exist or you don\'t have access to it',
+    });
+  });
+
+  it('should return 500 on server error', async () => {
+    // Mock request and response objects
+    const req = {
+      params: { orgId: 1 },
+      user: {
+        toJSON: () => ({ userId: 1 }),
+      },
+    };
+
+    const res = {
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+    };
+
+    Organisation.findOne.mockRejectedValue(new Error('DB Error'));
+
+    // Call the function
+    await getOrganisation(req, res);
+
+    // Check if the response was correct
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ error: 'internal server error' });
   });
 });

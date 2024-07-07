@@ -1,6 +1,6 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config");
-const { hashPassword } = require("../lib/utils");
+import { DataTypes } from "sequelize";
+import sequelize from "../config.js";
+import { hashPassword } from "../lib/utils.js";
 
 const User = sequelize.define(
   "User",
@@ -51,4 +51,4 @@ User.beforeCreate(async (user) => {
   }
 });
 
-module.exports = User;
+export default User;

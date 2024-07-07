@@ -1,8 +1,8 @@
-const User = require("../models/userModel");
-const { getAuthToken, checkPassword } = require("../lib/utils");
-const Organisation = require("../models/organisationModel");
+import User from "../models/userModel.js";
+import { getAuthToken, checkPassword } from "../lib/utils.js";
+import Organisation from "../models/organisationModel.js";
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const { email, password, firstName, lastName, phone } = req.body;
     const errors = [];
@@ -40,7 +40,7 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
@@ -76,9 +76,4 @@ const login = async (req, res) => {
       statusCode: 401,
     });
   }
-};
-
-module.exports = {
-  register,
-  login,
 };

@@ -1,12 +1,17 @@
-const express = require("express");
-const organisationController = require("../controllers/organisationController.js");
-const authMiddleware = require("../middlewares/authMiddleware.js");
+import { Router } from "express";
+import {
+  getUserOrganisations,
+  createOrganisation,
+  getOrganisation,
+  addUserToOrganisation,
+} from "../controllers/organisationController.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/", authMiddleware, organisationController.getUserOrganisations);
-router.post("/", authMiddleware, organisationController.createOrganisation);
-router.get("/:orgId", authMiddleware, organisationController.getOrganisation);
-router.post("/:orgId/users", organisationController.addUserToOrganisation);
+router.get("/", authMiddleware, getUserOrganisations);
+router.post("/", authMiddleware, createOrganisation);
+router.get("/:orgId", authMiddleware, getOrganisation);
+router.post("/:orgId/users", addUserToOrganisation);
 
-module.exports = router;
+export default router;

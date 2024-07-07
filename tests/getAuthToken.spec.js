@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
-import { getAuthToken } from '../lib/utils';
+import { getAuthToken } from '../lib/utils.js';
 
 config({ path: "./.env"})
 

@@ -1,8 +1,5 @@
-const { Op } = require("sequelize");
-const Organisation = require("../models/organisationModel");
-const User = require("../models/userModel");
-const sequelize = require("../sync");
-const UserOrganisation = require("../models/userOrganisationModel");
+import Organisation from "../models/organisationModel.js";
+import User from "../models/userModel.js";
 
 const getUserRecord = async (req, res) => {
   try {
@@ -27,7 +24,7 @@ const getUserRecord = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({
+    const user = await findOne({
       where: { userId },
       include: Organisation,
     });
@@ -66,4 +63,4 @@ const getUserRecord = async (req, res) => {
   }
 };
 
-module.exports = { getUserRecord };
+export default getUserRecord;
