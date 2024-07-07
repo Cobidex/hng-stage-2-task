@@ -5,7 +5,7 @@ const getOrganisation = async (req, res) => {
   try {
     const { orgId } = req.params;
     const me = req.user;
-    let  = await Organisation.findOne({
+    let org = await Organisation.findOne({
       where: { orgId },
       include: User,
     });

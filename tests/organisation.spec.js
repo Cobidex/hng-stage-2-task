@@ -20,7 +20,7 @@ describe("Organisation Access", () => {
   });
 
   it("should not allow users to see data from organisations they don't have access to", async () => {
-    Organisation.findOne = vi.fn().mockResolvedValue({
+    Organisation.findOne.mockResolvedValue({
       toJSON: () => ({
         orgId: "1",
         name: "Test Org",
