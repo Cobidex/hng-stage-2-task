@@ -21,7 +21,7 @@ export const getOrganisation = async (req, res) => {
     if (!org)
       return res.status(404).json({
         status: "Not Found",
-        message: "Organisation id not exist or you dont have access to it",
+        message: "Organisation id not exist or you don't have access to it",
       });
 
     return res.status(200).json({

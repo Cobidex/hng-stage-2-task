@@ -2,14 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { getOrganisation } from '../controllers/organisationController.js';
 import Organisation from '../models/organisationModel.js';
 
-vi.mock('../models/organisationModel.js', () => ({
-  Organisation: {
-    findOne: vi.fn(),
-  },
-  User: {},
-}));
-
 describe('getOrganisation', () => {
+  Organisation.findOne = vi.fn();
   it('should return organisation data if user has access', async () => {
     const req = {
       params: { orgId: 1 },
@@ -57,7 +51,7 @@ describe('getOrganisation', () => {
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({
       status: 'Not Found',
-      message: 'Organisation id not exist or you don\'t have access to it',
+      message: "Organisation id not exist or you don't have access to it",
     });
   });
 
