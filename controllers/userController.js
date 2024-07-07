@@ -24,7 +24,7 @@ const getUserRecord = async (req, res) => {
       });
     }
 
-    const user = await findOne({
+    const user = await User.findOne({
       where: { userId },
       include: Organisation,
     });
