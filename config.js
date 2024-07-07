@@ -3,12 +3,12 @@ import { config } from "dotenv";
 
 config({ path: "./.env" });
 
-const { DB_NAME, DB_USER, DB_PASSWORD } = process.env;
+const { DB_URL, DB_DIALECT } = process.env;
 
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: process.env.DB_HOST,
-  dialect: process.env.DB_DIALECT,
+const sequelize = new Sequelize(DB_URL, {
+  dialect: DB_DIALECT,
   logging: false,
 });
+
 
 export default sequelize;
