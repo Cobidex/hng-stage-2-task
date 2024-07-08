@@ -4,21 +4,11 @@ import Organisation from "../models/organisationModel.js";
 
 export const register = async (req, res) => {
   try {
-    const { email, password, firstName, lastName, phone } = req.body;
-    const errors = [];
-
-    if (!email) errors.push({ field: "email", message: "email missing" });
-    if (!password)
-      errors.push({ field: "password", message: "password missing" });
-    if (!firstName)
-      errors.push({ field: "firstName", message: "firstName missing" });
-    if (!lastName)
-      errors.push({ field: "lastName", message: "lastName missing" });
-    if (!phone) errors.push({ field: "phone", message: "phone missing" });
-    if (errors.length > 0) return res.status(422).json({ errors });
-
-    const user = await User.create({ ...req.body });
-    const org = await Organisation.create({ name: `${firstName}'s Organisation` });
+    const { firstName, lastName, password, email, phone } = req.body;
+    const user = await User.create({ firstName, lastName, password, email, phone });
+    const org = await Organisation.create({
+      name: `${firstName}'s Organisation`,
+    });
     await org.addUser(user, { through: { selfGranted: false } });
 
     const accessToken = getAuthToken({ userId: user.id });
@@ -32,6 +22,13 @@ export const register = async (req, res) => {
       },
     });
   } catch (e) {
+    const errors = [];
+    if (e.name === "SequelizeValidationError") {
+      e.errors.forEach((err) =>
+        errors.push({ field: err.path, message: err.message })
+      );
+      return res.status(422).json({ errors });
+    }
     return res.status(404).json({
       status: "Bad request",
       message: "Registration unsuccessful",

@@ -13,22 +13,63 @@ const User = sequelize.define(
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'firstName missing',
+        },
+        notEmpty: {
+          msg: 'Must not be empty string',
+        }
+      }
     },
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'lastName missing',
+        },
+        notEmpty: {
+          msg: 'Must not be empty string',
+        }
+      }
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      validate: {
+        notNull: {
+          msg: 'Email missing',
+        },
+        notEmpty: {
+          msg: 'Must not be empty string',
+        }
+      }
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Password missing',
+        },
+        notEmpty: {
+          msg: 'Must not be empty string',
+        }
+      }
     },
     phone: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'phone missing',
+        },
+        notEmpty: {
+          msg: 'Must not be empty string',
+        }
+      }
     },
   },
   {

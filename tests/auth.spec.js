@@ -29,9 +29,9 @@ describe("Auth Controller E2E", () => {
   describe("Register", () => {
     it("should register user successfully with default organisation", async () => {
       const response = await request(app).post("/api/auth/register").send({
-        firstName: "John",
+        firstName: "Steve",
         lastName: "Doe",
-        email: "john.doe@example.com",
+        email: "steve.doe@example.com",
         password: "password",
         phone: "1234567890",
       });
@@ -40,14 +40,14 @@ describe("Auth Controller E2E", () => {
       expect(response.body.status).toBe("success");
       expect(response.body.message).toBe("Registration successful");
       expect(response.body.data.accessToken).toBeDefined();
-      expect(response.body.data.user.email).toBe("john.doe@example.com");
+      expect(response.body.data.user.email).toBe("steve.doe@example.com");
       expect(response.body.data.user.phone).toBe("1234567890");
-      expect(response.body.data.user.firstName).toBe("John");
+      expect(response.body.data.user.firstName).toBe("Steve");
       expect(response.body.data.user.lastName).toBe("Doe");
       expect(response.body.data.user.password).toBeUndefined();
 
       const org = await Organisation.findOne({
-        where: { name: "John's Organisation" },
+        where: { name: "Steve's Organisation" },
       });
       expect(org).toBeDefined();
     });
@@ -61,7 +61,7 @@ describe("Auth Controller E2E", () => {
       expect(response.status).toBe(422);
       expect(response.body.errors).toEqual(
         expect.arrayContaining([
-          { field: "password", message: "password missing" },
+          { field: "password", message: "Password missing" },
           { field: "firstName", message: "firstName missing" },
           { field: "phone", message: "phone missing" },
         ])

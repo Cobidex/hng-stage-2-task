@@ -46,7 +46,13 @@ export const createOrganisation = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    res.status(400).json({
+    if (e.name === "SequelizeValidationError") {
+        e.errors.forEach((err) =>
+          errors.push({ field: err.path, message: err.message })
+        );
+        return res.status(422).json({ errors });
+      }
+    return res.status(400).json({
       status: "Bad Request",
       message: "Client error",
       statusCode: 400,

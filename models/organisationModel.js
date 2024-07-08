@@ -12,6 +12,14 @@ const Organisation = sequelize.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'name missing',
+        },
+        notEmpty: {
+          msg: 'Must not be empty string',
+        }
+      }
     },
     description: {
       type: DataTypes.TEXT,
