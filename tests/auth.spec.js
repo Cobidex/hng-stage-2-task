@@ -28,7 +28,7 @@ describe("Auth Controller E2E", () => {
 
   describe("Register", () => {
     it("should register user successfully with default organisation", async () => {
-      const response = await request(app).post("/api/auth/register").send({
+      const response = await request(app).post("/auth/register").send({
         firstName: "Steve",
         lastName: "Doe",
         email: "steve.doe@example.com",
@@ -53,7 +53,7 @@ describe("Auth Controller E2E", () => {
     });
 
     it("should fail if required fields are missing or empty", async () => {
-      const response = await request(app).post("/api/auth/register").send({
+      const response = await request(app).post("/auth/register").send({
         lastName: "Doe",
         email: "john.doe@example.com",
         firstName: "",
@@ -78,7 +78,7 @@ describe("Auth Controller E2E", () => {
         phone: "1234567890",
       });
 
-      const response = await request(app).post("/api/auth/register").send({
+      const response = await request(app).post("/auth/register").send({
         firstName: "Jane",
         lastName: "Smith",
         email: "john.doe@example.com",
@@ -103,7 +103,7 @@ describe("Auth Controller E2E", () => {
         phone: "1234567890",
       });
 
-      const response = await request(app).post("/api/auth/login").send({
+      const response = await request(app).post("/auth/login").send({
         email: "john.doe@example.com",
         password: "password",
       });
@@ -116,7 +116,7 @@ describe("Auth Controller E2E", () => {
     });
 
     it("should fail with invalid credentials", async () => {
-      const response = await request(app).post("/api/auth/login").send({
+      const response = await request(app).post("/auth/login").send({
         email: "john.doe@example.com",
         password: "wrongpassword",
       });

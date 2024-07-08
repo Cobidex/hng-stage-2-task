@@ -9,7 +9,7 @@ const app = express();
 app.use(morgan("tiny"));
 app.use(json());
 
-app.use("/api/auth", authRouter);
+app.use("/auth", authRouter);
 
 app.use("/api/users", userRouter);
 
