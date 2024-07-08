@@ -52,17 +52,18 @@ describe("Auth Controller E2E", () => {
       expect(org).toBeDefined();
     });
 
-    it("should fail if required fields are missing", async () => {
+    it("should fail if required fields are missing or empty", async () => {
       const response = await request(app).post("/api/auth/register").send({
         lastName: "Doe",
         email: "john.doe@example.com",
+        firstName: "",
       });
 
       expect(response.status).toBe(422);
       expect(response.body.errors).toEqual(
         expect.arrayContaining([
           { field: "password", message: "Password missing" },
-          { field: "firstName", message: "firstName missing" },
+          { field: "firstName", message: "Must not be empty string" },
           { field: "phone", message: "phone missing" },
         ])
       );
